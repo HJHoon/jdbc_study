@@ -18,7 +18,7 @@ public class DeptEmpTransactionDaoImpl implements DeptEmpTransactionDao {
 	@Override
 	public int trInsertEmpAndDept(Employee emp, Department dept) {
 		String deptSql = "INSERT INTO department(deptno, deptname, floor) VALUES(?, ?, ?)";
-		String empSql = "insert into employee values(EmpNo, EmpName, Title, Manager, Salary, Dno, DeptNo)";
+		String empSql = "insert into employee values(EmpNo, EmpName, Title, Manager, Salary, Dno)";
 
 		int res = 0;
 		try (Connection conn = MySQLjdbcUtil.getConnection();) {
