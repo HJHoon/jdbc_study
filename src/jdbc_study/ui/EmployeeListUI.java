@@ -18,26 +18,26 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
-import jdbc_study.dto.Department;
+import jdbc_study.dto.Employee;
 
 @SuppressWarnings("serial")
-public class DepartmentListUI extends JFrame implements ActionListener{
+public class EmployeeListUI extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
 	private JTable table;
-	private List<Department> deptList;
+	private List<Employee> empList;
 	private JPopupMenu popupMenu;
 	private JMenuItem mntmPopUpdate;
 	private JMenuItem mntmPopDelete;
 	
 	private ErpManagementUI parent;
 	
-	public DepartmentListUI() {
+	public EmployeeListUI() {
 		initComponents();
 	}
 	
-	public void setDepartmentList(List<Department> deptList) {
-		this.deptList = deptList;
+	public void setEmployeeList(List<Employee> empList) {
+		this.empList = empList;
 	}
 
 	private void initComponents() {
@@ -71,24 +71,24 @@ public class DepartmentListUI extends JFrame implements ActionListener{
 	public void reloadData() {
 		table.setModel(new DefaultTableModel(getRows(),getColumnNames()));
 		
-		// 부서번호, 부서명은 가운데 정렬
-		tableCellAlignment(SwingConstants.CENTER, 0,1);
-		// 위치(층)은 우측 정렬
-		tableCellAlignment(SwingConstants.RIGHT, 2);	
+		// 사원번호, 사원명, 직책, 직속상사, 부서정보 은 가운데 정렬
+		tableCellAlignment(SwingConstants.CENTER, 0,1,2,3,5);
+		// 급여은 우측 정렬
+		tableCellAlignment(SwingConstants.RIGHT, 4);	
 		// 부서번호, 부서명, 위치 의 폭을 (100, 200, 70)으로 가능하면 설정 
-		tableSetWidth(100, 200, 70);
+		tableSetWidth(70, 100, 70, 100, 120, 100);
 	}
 
 	private Object[][] getRows() {
-		Object[][] rows = new Object[deptList.size()][];
-		for(int i=0; i<deptList.size(); i++) {
-			rows[i] = deptList.get(i).toArray();
+		Object[][] rows = new Object[empList.size()][];
+		for(int i=0; i<empList.size(); i++) {
+			rows[i] = empList.get(i).toArray();
 		}
 		return rows;
 	}
 
 	private String[] getColumnNames() {
-		return new String[] {"부서번호", "부서명", "위치(층)"};
+		return new String[] {"사원번호", "사원명", "직책", "직속상사", "급여", "부서"};
 	}
 
 	
@@ -116,19 +116,19 @@ public class DepartmentListUI extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		int i = table.getSelectedRow();
 		if (table.getModel().getRowCount() == 0) {	// 부서정보가 존재하지 않을 경우
-			parent.showDepartmentUI();
+//			parent.showDepartmentUI();
 			return;
 		}
 		if (i  < 0 || i > table.getModel().getRowCount()-1) { //선택하지 않은 경우
-			JOptionPane.showMessageDialog(null, "선택된 부서가 없습니다.");
+			JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
 			return;
 		}
-		int deptNo = (int) table.getModel().getValueAt(i, 0);
-		parent.showDepartmentUI(deptNo);
+//		int deptNo = (int) table.getModel().getValueAt(i, 0);
+//		parent.showDepartmentUI(deptNo);
 	}
 
 	public void setErpManagementUI(ErpManagementUI erpManagementUI) {
 		this.parent = erpManagementUI;
 	}
-	
+
 }
