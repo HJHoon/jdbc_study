@@ -58,7 +58,7 @@ public class PanelEmployee extends JPanel implements ActionListener {
 		chooser = new JFileChooser(imgPath);
 
 		initComponents();
-		
+
 		selectedImpPath = imgPath + "no.jpg";
 		switchImage(selectedImpPath);
 
@@ -139,6 +139,7 @@ public class PanelEmployee extends JPanel implements ActionListener {
 	}
 
 	private void switchImage(String filePath) {
+
 		Image tmpIcon = new ImageIcon(filePath).getImage().getScaledInstance(imgWidth, imgHeight, Image.SCALE_SMOOTH);
 		ImageIcon imageIcon = new ImageIcon(tmpIcon);
 		lblImg.setIcon(imageIcon);

@@ -8,7 +8,6 @@ import java.awt.event.ItemListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,7 +33,6 @@ public class EmployeeUI extends JFrame implements ActionListener, ItemListener {
 	private ErpManagementUI erpManagementUI;
 
 	public EmployeeUI() {
-//		dao = new DepartmentDaoImpl();
 		initComponents();
 	}
 
@@ -44,7 +42,7 @@ public class EmployeeUI extends JFrame implements ActionListener, ItemListener {
 
 	public void setDepDao(DepartmentDao dao) {
 		this.depDao = dao;
-		this.pContent.setCmbModel(dao.selectDepartmentByAll());
+		this.pContent.setCmbModel(depDao.selectDepartmentByAll());
 		this.pContent.getCmbDept().addItemListener(this);
 	}
 
@@ -95,7 +93,7 @@ public class EmployeeUI extends JFrame implements ActionListener, ItemListener {
 				pContent.clearTextField();
 				btnAdd.setText("추가");
 			}
-			erpManagementUI.refreshUI();
+			erpManagementUI.refreshListUI();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -110,7 +108,7 @@ public class EmployeeUI extends JFrame implements ActionListener, ItemListener {
 				JOptionPane.showMessageDialog(null, String.format("%s 사원이 추가되었습니다.", newEmp.getEmpName()));
 				pContent.clearTextField();
 			}
-			erpManagementUI.refreshUI();
+			erpManagementUI.refreshListUI();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

@@ -3,6 +3,7 @@ package jdbc_study.ui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -114,32 +115,47 @@ public class EmployeeListUI extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == mntmPopUpdate) {
-			int i = table.getSelectedRow();
-			if (table.getModel().getRowCount() == 0) { // 부서정보가 존재하지 않을 경우
-				parent.showEmployeeUI();
-				return;
+		try {
+			if (e.getSource() == mntmPopUpdate) {
+				updateUI();
 			}
-			if (i < 0 || i > table.getModel().getRowCount() - 1) { // 선택하지 않은 경우
-				JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
-				return;
+
+			if (e.getSource() == mntmPopDelete) {
+				deleteUI();
 			}
-			int empNo = (int) table.getModel().getValueAt(i, 0);
-			parent.showEmployeeUI(empNo);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
-		if (e.getSource() == mntmPopDelete) {
-			int i = table.getSelectedRow();
-			if (table.getModel().getRowCount() == 0) { // 부서정보가 존재하지 않을 경우
-				parent.showEmployeeUI();
-				return;
-			}
-			if (i < 0 || i > table.getModel().getRowCount() - 1) { // 선택하지 않은 경우
-				JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
-				return;
-			}
-			int empNo = (int) table.getModel().getValueAt(i, 0);
-			parent.actionPerformedBtnEmpDelete(empNo);
+	}
+
+	private void deleteUI() throws SQLException {
+		int i = table.getSelectedRow();
+		if (table.getModel().getRowCount() == 0) { // 부서정보가 존재하지 않을 경우
+			parent.showEmployeeUI();
+			return;
 		}
+		if (i < 0 || i > table.getModel().getRowCount() - 1) { // 선택하지 않은 경우
+			JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
+			return;
+		}
+		int empNo = (int) table.getModel().getValueAt(i, 0);
+		parent.actionPerformedBtnEmpDelete(empNo);
+	}
+
+	private void updateUI() throws SQLException {
+		int i = table.getSelectedRow();
+		if (table.getModel().getRowCount() == 0) { // 부서정보가 존재하지 않을 경우
+			parent.showEmployeeUI();
+			return;
+		}
+		if (i < 0 || i > table.getModel().getRowCount() - 1) { // 선택하지 않은 경우
+			JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
+			return;
+		}
+		int empNo = (int) table.getModel().getValueAt(i, 0);
+		Employee emp = empList.get(empList.indexOf(new Employee(empNo)));
+
+		parent.showEmployeeUI(emp);
 	}
 
 	public void setErpManagementUI(ErpManagementUI erpManagementUI) {

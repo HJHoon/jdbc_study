@@ -43,7 +43,6 @@ public class Department {
 		this.floor = floor;
 	}
 
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -70,9 +69,9 @@ public class Department {
 	public String toString() {
 		return String.format("%s(%s)", deptName, deptNo);
 	}
-	
+
 	public Object[] toArray() {
-		return new Object[]{deptNo, deptName, floor};
+		return new Object[] { deptNo, deptName, floor };
 	}
 
 }
