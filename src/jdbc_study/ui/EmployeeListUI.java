@@ -21,7 +21,7 @@ import javax.swing.table.TableColumnModel;
 import jdbc_study.dto.Employee;
 
 @SuppressWarnings("serial")
-public class EmployeeListUI extends JFrame implements ActionListener{
+public class EmployeeListUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -29,69 +29,69 @@ public class EmployeeListUI extends JFrame implements ActionListener{
 	private JPopupMenu popupMenu;
 	private JMenuItem mntmPopUpdate;
 	private JMenuItem mntmPopDelete;
-	
+
 	private ErpManagementUI parent;
-	
+
 	public EmployeeListUI() {
 		initComponents();
 	}
-	
+
 	public void setEmployeeList(List<Employee> empList) {
 		this.empList = empList;
 	}
 
 	private void initComponents() {
-		setTitle("부서 목록");
+		setTitle("사원 목록");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
-		contentPane.setBorder(new TitledBorder(null, "부서 목록", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPane.setBorder(new TitledBorder(null, "사원 목록", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
-		
+
 		table = new JTable();
 		scrollPane.setViewportView(table);
-		
+
 		popupMenu = new JPopupMenu();
 
 		mntmPopUpdate = new JMenuItem("수정");
 		mntmPopUpdate.addActionListener(this);
 		popupMenu.add(mntmPopUpdate);
-		
+
 		mntmPopDelete = new JMenuItem("삭제");
+		mntmPopDelete.addActionListener(this);
 		popupMenu.add(mntmPopDelete);
-		
+
 		table.setComponentPopupMenu(popupMenu);
 		scrollPane.setComponentPopupMenu(popupMenu);
 	}
 
 	public void reloadData() {
-		table.setModel(new DefaultTableModel(getRows(),getColumnNames()));
-		
+		table.setModel(new DefaultTableModel(getRows(), getColumnNames()));
+
 		// 사원번호, 사원명, 직책, 직속상사, 부서정보 은 가운데 정렬
-		tableCellAlignment(SwingConstants.CENTER, 0,1,2,3,5);
+		tableCellAlignment(SwingConstants.CENTER, 0, 1, 2, 3, 5);
 		// 급여은 우측 정렬
-		tableCellAlignment(SwingConstants.RIGHT, 4);	
-		// 부서번호, 부서명, 위치 의 폭을 (100, 200, 70)으로 가능하면 설정 
+		tableCellAlignment(SwingConstants.RIGHT, 4);
+		// 부서번호, 부서명, 위치 의 폭을 (100, 200, 70)으로 가능하면 설정
 		tableSetWidth(70, 100, 70, 100, 120, 100);
 	}
 
 	private Object[][] getRows() {
 		Object[][] rows = new Object[empList.size()][];
-		for(int i=0; i<empList.size(); i++) {
+		for (int i = 0; i < empList.size(); i++) {
 			rows[i] = empList.get(i).toArray();
 		}
 		return rows;
 	}
 
 	private String[] getColumnNames() {
-		return new String[] {"사원번호", "사원명", "직책", "직속상사", "급여", "부서"};
+		return new String[] { "사원번호", "사원명", "직책", "직속상사", "급여", "부서" };
 	}
 
-	
 	// 테이블 셀 내용의 정렬
 	protected void tableCellAlignment(int align, int... idx) {
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
@@ -114,17 +114,32 @@ public class EmployeeListUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int i = table.getSelectedRow();
-		if (table.getModel().getRowCount() == 0) {	// 부서정보가 존재하지 않을 경우
-//			parent.showDepartmentUI();
-			return;
+		if (e.getSource() == mntmPopUpdate) {
+			int i = table.getSelectedRow();
+			if (table.getModel().getRowCount() == 0) { // 부서정보가 존재하지 않을 경우
+				parent.showEmployeeUI();
+				return;
+			}
+			if (i < 0 || i > table.getModel().getRowCount() - 1) { // 선택하지 않은 경우
+				JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
+				return;
+			}
+			int empNo = (int) table.getModel().getValueAt(i, 0);
+			parent.showEmployeeUI(empNo);
 		}
-		if (i  < 0 || i > table.getModel().getRowCount()-1) { //선택하지 않은 경우
-			JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
-			return;
+		if (e.getSource() == mntmPopDelete) {
+			int i = table.getSelectedRow();
+			if (table.getModel().getRowCount() == 0) { // 부서정보가 존재하지 않을 경우
+				parent.showEmployeeUI();
+				return;
+			}
+			if (i < 0 || i > table.getModel().getRowCount() - 1) { // 선택하지 않은 경우
+				JOptionPane.showMessageDialog(null, "선택된 사원 없습니다.");
+				return;
+			}
+			int empNo = (int) table.getModel().getValueAt(i, 0);
+			parent.actionPerformedBtnEmpDelete(empNo);
 		}
-//		int deptNo = (int) table.getModel().getValueAt(i, 0);
-//		parent.showDepartmentUI(deptNo);
 	}
 
 	public void setErpManagementUI(ErpManagementUI erpManagementUI) {

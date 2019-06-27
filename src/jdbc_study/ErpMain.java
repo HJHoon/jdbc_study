@@ -8,7 +8,7 @@ public class ErpMain {
 
 	public static void main(String[] args) {
 		System.out.println(System.getProperty("user.dir") + System.getProperty("file.separator"));
-		System.out.println("Ã¹ ¹øÂ° ¼öÁ¤");
+		System.out.println("ì²« ë²ˆì§¸ ìˆ˜ì •");
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

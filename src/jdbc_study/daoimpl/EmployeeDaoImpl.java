@@ -17,20 +17,20 @@ import jdbc_study.jdbc.MySQLjdbcUtil;
 
 public class EmployeeDaoImpl implements EmployeeDao {
 	static final Logger log = LogManager.getLogger();
-	
+
 	@Override
 	public List<Employee> selectEmployeeByAll() throws SQLException {
 		String sql = "SELECT empno, empname, title, manager, salary, dno, pic FROM employee";
 		List<Employee> lists = null;
-		try(Connection conn = MySQLjdbcUtil.getConnection();
+		try (Connection conn = MySQLjdbcUtil.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql);
-				ResultSet rs = pstmt.executeQuery()){
+				ResultSet rs = pstmt.executeQuery()) {
 			log.trace(pstmt);
 			if (rs.next()) {
 				lists = new ArrayList<Employee>();
 				do {
 					lists.add(getEmployee(rs));
-				}while(rs.next());
+				} while (rs.next());
 			}
 
 		}
@@ -38,13 +38,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	private Employee getEmployee(ResultSet rs) throws SQLException {
-		return new Employee(rs.getInt("empno"), 
-				            rs.getString("empname"), 
-				            rs.getString("title"), 
-				            new Employee(rs.getInt("manager")), 
-				            rs.getInt("salary"), 
-				            new Department(rs.getInt("dno")), 
-				            rs.getBytes("pic"));
+		return new Employee(rs.getInt("empno"), rs.getString("empname"), rs.getString("title"),
+				new Employee(rs.getInt("manager")), rs.getInt("salary"), new Department(rs.getInt("dno")),
+				rs.getBytes("pic"));
 	}
 
 	@Override
@@ -52,12 +48,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		log.trace("selectEmployeeByNo()");
 		String sql = "SELECT empno, empname, title, manager, salary, dno, pic FROM employee where empno = ?";
 		Employee selEmp = null;
-		try(Connection conn = MySQLjdbcUtil.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql);){
+		try (Connection conn = MySQLjdbcUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			pstmt.setInt(1, employee.getEmpNo());
 			log.trace(pstmt);
-			try(ResultSet rs = pstmt.executeQuery()){
-				if(rs.next()) {
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
 					selEmp = getEmployee(rs);
 				}
 			}
@@ -69,18 +64,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public int insertEmployee(Employee employee) throws SQLException {
 		log.trace("insertEmployee()");
 		String sql = "insert into employee values(?, ?, ?, ?, ?, ?, ?)";
-		
-		try(Connection conn = MySQLjdbcUtil.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql)){
-			
+
+		try (Connection conn = MySQLjdbcUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
 			pstmt.setInt(1, employee.getEmpNo());
 			pstmt.setString(2, employee.getEmpName());
 			pstmt.setString(3, employee.getTitle());
 			pstmt.setInt(4, employee.getManager().getEmpNo());
 			pstmt.setInt(5, employee.getSalary());
 			pstmt.setInt(6, employee.getDno().getDeptNo());
-			pstmt.setBytes(7, employee.getPic());
 			log.trace(pstmt);
+			pstmt.setBytes(7, employee.getPic());
 			return pstmt.executeUpdate();
 		}
 	}
@@ -89,8 +83,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public int deleteEmployee(Employee employee) throws SQLException {
 		log.trace("deleteEmployee()");
 		String sql = "delete from employee where empno = ?";
-		try(Connection conn = MySQLjdbcUtil.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql)){
+		try (Connection conn = MySQLjdbcUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, employee.getEmpNo());
 			log.trace(pstmt);
 			return pstmt.executeUpdate();
@@ -100,11 +93,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public int updateEmployee(Employee employee) throws SQLException {
 		log.trace("updateEmployee()");
-		String sql = "update employee "
-			       + "set empname=?, title=?, manager=?, salary=?, dno=?, pic=? "
-				   + "where empno=?";
-		try(Connection conn = MySQLjdbcUtil.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql)){
+		String sql = "update employee " + "set empname=?, title=?, manager=?, salary=?, dno=?, pic=? "
+				+ "where empno=?";
+		try (Connection conn = MySQLjdbcUtil.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, employee.getEmpName());
 			pstmt.setString(2, employee.getTitle());
 			pstmt.setInt(3, employee.getManager().getEmpNo());

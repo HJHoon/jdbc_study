@@ -24,14 +24,14 @@ public class DepartmentUI extends JFrame implements ActionListener {
 	private PanelDepartment pContent;
 
 	private DepartmentDao dao;
-	
+
 	private ErpManagementUI erpManagementUI;
-	
+
 	public DepartmentUI() {
 //		dao = new DepartmentDaoImpl();
 		initComponents();
 	}
-	
+
 	public void setDao(DepartmentDao dao) {
 		this.dao = dao;
 	}
@@ -44,17 +44,17 @@ public class DepartmentUI extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
+
 		pContent = new PanelDepartment();
 		contentPane.add(pContent, BorderLayout.CENTER);
-		
+
 		JPanel pBtn = new JPanel();
 		contentPane.add(pBtn, BorderLayout.SOUTH);
-		
+
 		btnAdd = new JButton("추가");
 		btnAdd.addActionListener(this);
 		pBtn.add(btnAdd);
-		
+
 		btnClear = new JButton("취소");
 		btnClear.addActionListener(this);
 		pBtn.add(btnClear);
@@ -67,11 +67,12 @@ public class DepartmentUI extends JFrame implements ActionListener {
 		if (e.getSource() == btnAdd) {
 			if (btnAdd.getText().equals("추가")) {
 				actionPerformedBtnAdd(e);
-			}else {
+			} else {
 				actionPerformedBtnUpdate(e);
 			}
 		}
 	}
+
 	private void actionPerformedBtnUpdate(ActionEvent e) {
 		Department newDept = pContent.getDepartment();
 		int res;
@@ -85,7 +86,7 @@ public class DepartmentUI extends JFrame implements ActionListener {
 			erpManagementUI.refreshUI();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
-		}		
+		}
 	}
 
 	protected void actionPerformedBtnAdd(ActionEvent e) {
@@ -103,11 +104,11 @@ public class DepartmentUI extends JFrame implements ActionListener {
 		}
 
 	}
-	
+
 	protected void actionPerformedBtnClear(ActionEvent e) {
 		pContent.clearTextField();
 	}
-	
+
 	public void setDepartment(Department dept) {
 		pContent.setDepartment(dept);
 		pContent.getTfDeptNo().setEditable(false);
@@ -116,5 +117,10 @@ public class DepartmentUI extends JFrame implements ActionListener {
 
 	public void setParent(ErpManagementUI erpManagementUI) {
 		this.erpManagementUI = erpManagementUI;
+	}
+
+	public void clearDepartment() {
+		pContent.clearTextField();
+		btnAdd.setText("추가");
 	}
 }
